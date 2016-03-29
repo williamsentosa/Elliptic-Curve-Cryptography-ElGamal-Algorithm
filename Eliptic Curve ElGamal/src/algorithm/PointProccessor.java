@@ -6,7 +6,7 @@
 package algorithm;
 
 /**
- *
+ * @author 
  * @author William Sentosa
  */
 public class PointProccessor {
