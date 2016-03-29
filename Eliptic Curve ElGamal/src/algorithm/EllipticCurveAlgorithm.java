@@ -6,16 +6,17 @@
 package algorithm;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
  * @author William Sentosa
  */
 public class EllipticCurveAlgorithm {
-   public static final long P = 11;
-   public static final long A = 1;
+   public static final long P = 283;
+   public static final long A = 12;
    public static final long B = 14;
-   private final Point base = new Point();
+   private final Point base;
    private final long NULL_VALUE = -1;
    
    private ArrayList<Point> field;
@@ -26,6 +27,7 @@ public class EllipticCurveAlgorithm {
     */
    public EllipticCurveAlgorithm() {
        field = generateGaloisField();
+       base = field.get(10); // Creating base point
    }
    
    /**
@@ -97,6 +99,26 @@ public class EllipticCurveAlgorithm {
                break;
            }
        }
+       return result;
+   }
+   
+   /**
+    * Generating a random public key with maximum value of P
+    * @return a random public key
+    */
+   public long generatePublicKey() {
+       Random rand = new Random();
+       return rand.nextLong() % P;
+   }
+   
+   /**
+    * Generate a private key based on a public key
+    * @param pub public key
+    * @return private key
+    */
+   public Point generatePrivateKey(long pub) {
+       PointProccessor processor = new PointProccessor();
+       Point result = processor.multiply(pub, base);
        return result;
    }
    
