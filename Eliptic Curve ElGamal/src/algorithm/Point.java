@@ -45,6 +45,10 @@ public class Point {
         return result;
     }
     
+    public boolean isEqual(Point p) {
+        return x==p.x && y==p.y;
+    }
+    
     public void encrypt(Point pub, Point base) {
         
     }

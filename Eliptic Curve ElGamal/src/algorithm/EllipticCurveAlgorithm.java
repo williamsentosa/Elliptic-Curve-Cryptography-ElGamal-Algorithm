@@ -63,6 +63,9 @@ public class EllipticCurveAlgorithm {
        return result;
    }
    
+   /**
+    * Generate an array with elements which powered by two.
+    */
    private void generatePoweredByTwo() {
        poweredByTwo = new long[(int)P];
        for(int i=0; i<P; i++) {
@@ -70,16 +73,39 @@ public class EllipticCurveAlgorithm {
        }
    }
    
+   /**
+    * Mapping from byte to point
+    * @param b byte which will be mapped
+    * @return Point
+    */
    private Point map(byte b) {
-       Point result = new Point();
+       int index = (int) b & 0xFF;
+       Point result = new Point(field.get(index).getX(), field.get(index).getY());      
        return result;
    }
    
+   /**
+    * Mapping from point too byte
+    * @param p point which will be mapped
+    * @return byte 
+    */
    private byte map(Point p) {
        byte result = 0;
+       for(int i=0; i<field.size(); i++) {
+           if(field.get(i).isEqual(p)) {
+               result = (byte) i;
+               break;
+           }
+       }
        return result;
    }
    
+   /**
+    * Encrypt array of byte to encrypted byte
+    * @param bytes array of byte which will be encrypted
+    * @param pub public key in Point
+    * @return encrypted byte
+    */
    public byte[] encrypt(byte[] bytes, Point pub) {
        byte[] result = new byte[bytes.length];
        Point[] p = new Point[bytes.length];
@@ -91,6 +117,12 @@ public class EllipticCurveAlgorithm {
        return result;
    }
    
+   /**
+    * Decrypt decrypted array of byte to array of byte 
+    * @param bytes array of byte which will be decrypted
+    * @param pri private key
+    * @return array of byte
+    */
    public byte[] decrypt(byte[] bytes, long pri) {
        byte[] result = new byte[bytes.length];
        Point[] p = new Point[bytes.length];
@@ -104,11 +136,14 @@ public class EllipticCurveAlgorithm {
    
    public static void main(String args[]) {
        EllipticCurveAlgorithm algorithm = new EllipticCurveAlgorithm();
-       int count = 0;
-       for(int i=0; i<algorithm.field.size(); i++) {
-           System.out.println(algorithm.field.get(i));
-       }
-       System.out.println(algorithm.field.size());
+//       int count = 0;
+//       for(int i=0; i<algorithm.field.size(); i++) {
+//           System.out.println(algorithm.field.get(i));
+//       }
+//       System.out.println(algorithm.field.size());
+       Point p = algorithm.map((byte)-78);
+       System.out.println(p);
+       System.out.println(algorithm.map(p));
    }
    
 }
