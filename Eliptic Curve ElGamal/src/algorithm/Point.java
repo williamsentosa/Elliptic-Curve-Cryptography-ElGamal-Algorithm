@@ -49,11 +49,5 @@ public class Point {
         return x==p.x && y==p.y;
     }
     
-    public void encrypt(Point pub, Point base) {
-        
-    }
     
-    public void decrypt(long pri, Point base) {
-        
-    }
 }

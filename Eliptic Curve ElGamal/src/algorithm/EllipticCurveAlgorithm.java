@@ -133,7 +133,7 @@ public class EllipticCurveAlgorithm {
        Point[] p = new Point[bytes.length];
        for(int i=0; i<bytes.length; i++) {
            p[i] = map(bytes[i]);
-           p[i].encrypt(pub, base);
+//           p[i].encrypt(pub, base);
            result[i] = map(p[i]);
        }
        return result;
@@ -150,7 +150,7 @@ public class EllipticCurveAlgorithm {
        Point[] p = new Point[bytes.length];
        for(int i=0; i<bytes.length; i++) {
            p[i] = map(bytes[i]);
-           p[i].decrypt(pri, base);
+//           p[i].decrypt(pri, base);
            result[i] = map(p[i]);
        }
        return result;
