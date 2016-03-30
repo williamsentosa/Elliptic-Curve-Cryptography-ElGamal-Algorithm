@@ -72,7 +72,8 @@ public class PointProccessor {
         long lq = n, ly = 1;
         long tq = lq, ty = ly;
         while (lq != 1) {
-            long d = gq/lq;
+            long d;
+            d = gq/lq;
             lq = gq - d*lq; ly = gy - d*ly;
             gq = tq; gy = ty;
             tq = lq; ty = ly;

@@ -7,6 +7,7 @@ package algorithm;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.util.Pair;
 
 /**
  *
@@ -16,7 +17,7 @@ public class EllipticCurveAlgorithm {
    public static final long P = 283;
    public static final long A = 12;
    public static final long B = 14;
-   private final Point base;
+   public final Point base;
    private final long NULL_VALUE = -1;
    
    private ArrayList<Point> field;
@@ -129,12 +130,18 @@ public class EllipticCurveAlgorithm {
     * @return encrypted byte
     */
    public byte[] encrypt(byte[] bytes, Point pub) {
-       byte[] result = new byte[bytes.length];
+       PointProccessor processor = new PointProccessor();
+       byte[] result = new byte[bytes.length*2];
        Point[] p = new Point[bytes.length];
+       int j = 0;
        for(int i=0; i<bytes.length; i++) {
            p[i] = map(bytes[i]);
-//           p[i].encrypt(pub, base);
-           result[i] = map(p[i]);
+           System.out.println(p[i]);
+           Pair<Point, Point> pair = processor.encrypt(p[i], pub, base);
+           result[j] = map(pair.getKey());
+           j++;
+           result[j] = map(pair.getValue());
+           j++;
        }
        return result;
    }
@@ -146,26 +153,36 @@ public class EllipticCurveAlgorithm {
     * @return array of byte
     */
    public byte[] decrypt(byte[] bytes, long pri) {
-       byte[] result = new byte[bytes.length];
+       PointProccessor processor = new PointProccessor();
+       byte[] result = new byte[bytes.length/2];
        Point[] p = new Point[bytes.length];
-       for(int i=0; i<bytes.length; i++) {
-           p[i] = map(bytes[i]);
-//           p[i].decrypt(pri, base);
-           result[i] = map(p[i]);
+       int j = 0;
+       for(int i=0; i<result.length; i++) {
+           Pair<Point, Point> pair = new Pair(p[j],p[j+1]);
+           j+=2;
+           Point temp = processor.decrypt(pair, pri, base);
+           result[i] = map(temp);
        }
        return result;
    }
    
    public static void main(String args[]) {
        EllipticCurveAlgorithm algorithm = new EllipticCurveAlgorithm();
-//       int count = 0;
-//       for(int i=0; i<algorithm.field.size(); i++) {
-//           System.out.println(algorithm.field.get(i));
-//       }
-//       System.out.println(algorithm.field.size());
-       Point p = algorithm.map((byte)-78);
-       System.out.println(p);
-       System.out.println(algorithm.map(p));
+       PointProccessor processor = new PointProccessor();
+       String text = "Halo nama saya adalah william sentosa";
+       byte[] bytes = text.getBytes();
+       for(int i=0; i<bytes.length; i++) {
+           System.out.print(bytes[i] + " ");
+       }
+       System.out.println();
+       long pri = 5;
+       Point pub = processor.multiply(pri, algorithm.base);
+       byte[] result = algorithm.encrypt(bytes, pub);
+       String str = new String(result);
+       System.out.println(str);
+       result = algorithm.decrypt(result, pri);
+       str = new String(result);
+       System.out.println(str);
    }
    
 }
