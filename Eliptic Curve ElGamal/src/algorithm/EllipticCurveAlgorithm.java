@@ -14,9 +14,9 @@ import javafx.util.Pair;
  * @author William Sentosa
  */
 public class EllipticCurveAlgorithm {
-   public static final long P = 307;
-   public static final long A = 11;
-   public static final long B = 14;
+   public static final long P = 239;
+   public static final long A = 8;
+   public static final long B = 10;
    public final Point base;
    private final long NULL_VALUE = -1;
    
