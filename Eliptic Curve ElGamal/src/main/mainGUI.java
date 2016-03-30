@@ -5,9 +5,24 @@
  */
 package main;
 
+//Parameter
+//A:7 B:-639 P:257
+//A:-499 B:-200 P:277
+//A:-368 B:-10 P:281
+
 import algorithm.EllipticCurveAlgorithm;
 import algorithm.Point;
 import algorithm.PointProccessor;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -27,6 +42,11 @@ public class mainGUI extends javax.swing.JFrame {
         ECC = new EllipticCurveAlgorithm();
         P = new Point();
         PP = new PointProccessor();
+        
+        ALabel.setText(String.valueOf(ECC.A));
+        BLabel.setText(String.valueOf(ECC.B));
+        PLabel.setText(String.valueOf(ECC.P));
+        basePointLabel.setText(ECC.base.toString());
     }
 
     /**
@@ -39,6 +59,7 @@ public class mainGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         EncryptDecrypt = new javax.swing.ButtonGroup();
+        fileChooser = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         privateKeyLabel = new javax.swing.JLabel();
         privateKeyField = new javax.swing.JTextField();
@@ -48,28 +69,39 @@ public class mainGUI extends javax.swing.JFrame {
         savePublicKey = new javax.swing.JButton();
         generateKey = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        privateKeyLabel1 = new javax.swing.JLabel();
         publicKeyInput = new javax.swing.JTextField();
         publicKeyLabel1 = new javax.swing.JLabel();
-        privateKeyInput1 = new javax.swing.JTextField();
         publicKeyLabel2 = new javax.swing.JLabel();
-        fileTextInput = new javax.swing.JTextField();
-        searchPrivate = new javax.swing.JButton();
+        fileTextInputEncrypt = new javax.swing.JTextField();
         searchPublic = new javax.swing.JButton();
         searchFileText = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        EncryptRadioButton = new javax.swing.JRadioButton();
-        DecryptRadioButton = new javax.swing.JRadioButton();
-        ExecuteButton = new javax.swing.JButton();
+        encrypt = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         InputText = new java.awt.Label();
         jScrollPane2 = new javax.swing.JScrollPane();
-        PlainteksArea = new javax.swing.JTextArea();
+        InputTeksArea = new javax.swing.JTextArea();
         OutputText = new java.awt.Label();
         jScrollPane1 = new javax.swing.JScrollPane();
-        CipherteksArea = new javax.swing.JTextArea();
+        OutputTeksArea = new javax.swing.JTextArea();
         saveOutput = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        privateKeyLabel1 = new javax.swing.JLabel();
+        privateKeyInput = new javax.swing.JTextField();
+        searchPrivate = new javax.swing.JButton();
+        publicKeyLabel5 = new javax.swing.JLabel();
+        fileTextInputDecrypt = new javax.swing.JTextField();
+        searchFileText2 = new javax.swing.JButton();
+        decrypt = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        ALabel = new javax.swing.JLabel();
+        BLabel = new javax.swing.JLabel();
+        PLabel = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        basePointLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -140,20 +172,11 @@ public class mainGUI extends javax.swing.JFrame {
                     .addComponent(savePublicKey)))
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Encryption and Decryption File"));
-
-        privateKeyLabel1.setText("Private Key :");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Encryption File"));
 
         publicKeyLabel1.setText("Public Key :");
 
         publicKeyLabel2.setText("File Text :");
-
-        searchPrivate.setText("Search");
-        searchPrivate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchPrivateActionPerformed(evt);
-            }
-        });
 
         searchPublic.setText("Search");
         searchPublic.addActionListener(new java.awt.event.ActionListener() {
@@ -169,43 +192,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
         });
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Choose"));
-
-        EncryptDecrypt.add(EncryptRadioButton);
-        EncryptRadioButton.setSelected(true);
-        EncryptRadioButton.setText("Encrypt");
-
-        EncryptDecrypt.add(DecryptRadioButton);
-        DecryptRadioButton.setText("Decrypt");
-        DecryptRadioButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DecryptRadioButtonActionPerformed(evt);
-            }
-        });
-
-        ExecuteButton.setText("Execute");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(EncryptRadioButton)
-                    .addComponent(DecryptRadioButton)
-                    .addComponent(ExecuteButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(EncryptRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(DecryptRadioButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(ExecuteButton))
-        );
+        encrypt.setText("Encrypt");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -213,68 +200,61 @@ public class mainGUI extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(publicKeyLabel2)
-                        .addGap(18, 18, 18)
-                        .addComponent(fileTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(7, 7, 7))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(privateKeyLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(privateKeyInput1, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(publicKeyLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(publicKeyInput, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchPrivate)
-                    .addComponent(searchPublic)
-                    .addComponent(searchFileText))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(publicKeyLabel1)
+                    .addComponent(publicKeyLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fileTextInputEncrypt)
+                    .addComponent(publicKeyInput))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchPublic, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchFileText, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(181, 181, 181)
+                .addComponent(encrypt)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(privateKeyLabel1)
-                            .addComponent(privateKeyInput1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchPrivate))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(publicKeyLabel1)
-                            .addComponent(publicKeyInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(searchPublic))
-                        .addGap(16, 16, 16)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(fileTextInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(publicKeyLabel2)
-                            .addComponent(searchFileText))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(publicKeyLabel1)
+                    .addComponent(publicKeyInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchPublic))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(publicKeyLabel2)
+                    .addComponent(fileTextInputEncrypt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchFileText))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(encrypt)
+                .addGap(7, 7, 7))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Result"));
 
         InputText.setText("Input Text :");
 
-        PlainteksArea.setColumns(20);
-        PlainteksArea.setRows(5);
-        jScrollPane2.setViewportView(PlainteksArea);
+        InputTeksArea.setColumns(20);
+        InputTeksArea.setRows(5);
+        jScrollPane2.setViewportView(InputTeksArea);
 
         OutputText.setText("Output Text :");
 
-        CipherteksArea.setColumns(20);
-        CipherteksArea.setRows(5);
-        jScrollPane1.setViewportView(CipherteksArea);
+        OutputTeksArea.setColumns(20);
+        OutputTeksArea.setRows(5);
+        jScrollPane1.setViewportView(OutputTeksArea);
 
         saveOutput.setText("Save");
+        saveOutput.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveOutputActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -282,13 +262,10 @@ public class mainGUI extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(InputText, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(253, 253, 253))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(InputText, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(OutputText, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,15 +287,139 @@ public class mainGUI extends javax.swing.JFrame {
                     .addComponent(saveOutput))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
-                .addGap(250, 250, 250))
+                .addGap(396, 396, 396))
         );
 
         OutputText.getAccessibleContext().setAccessibleName("OutputText");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel1.setText("Kriptografi - Elliptical Curve El Gamal");
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Decryption File"));
+
+        privateKeyLabel1.setText("Private Key :");
+
+        searchPrivate.setText("Search");
+        searchPrivate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchPrivateActionPerformed(evt);
+            }
+        });
+
+        publicKeyLabel5.setText("File Text :");
+
+        searchFileText2.setText("Search");
+        searchFileText2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFileText2ActionPerformed(evt);
+            }
+        });
+
+        decrypt.setText("Decrypt");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(privateKeyLabel1)
+                    .addComponent(publicKeyLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(privateKeyInput)
+                    .addComponent(fileTextInputDecrypt))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchPrivate, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchFileText2, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(184, 184, 184)
+                .addComponent(decrypt)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(searchPrivate)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(privateKeyLabel1)
+                            .addComponent(privateKeyInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(5, 5, 5)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(publicKeyLabel5)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(fileTextInputDecrypt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchFileText2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(decrypt)
+                .addGap(7, 7, 7))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("ECC Parameter"));
+
+        jLabel2.setText("A : ");
+
+        jLabel3.setText("B : ");
+
+        jLabel4.setText("P : ");
+
+        jLabel5.setText("Base Point : ");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(ALabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(BLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(18, 18, 18)
+                        .addComponent(PLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(basePointLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2)
+                    .addComponent(ALabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(BLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(PLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addComponent(basePointLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -328,27 +429,37 @@ public class mainGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(214, 214, 214)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(212, 212, 212))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 231, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -356,27 +467,133 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void savePrivateKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePrivateKeyActionPerformed
         // TODO add your handling code here:
+        int returnVal = fileChooser.showSaveDialog(this);
+       
+        // process selected file
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                PrintWriter out = new PrintWriter(file);
+                out.println(privateKeyField.getText());
+                out.flush();
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+            //System.out.println("File access cancelled by user.");
+        }
     }//GEN-LAST:event_savePrivateKeyActionPerformed
 
     private void savePublicKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePublicKeyActionPerformed
         // TODO add your handling code here:
+        int returnVal = fileChooser.showSaveDialog(this);
+       
+        // process selected file
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                PrintWriter out = new PrintWriter(file);
+                out.println(publicKeyField.getText());
+                out.flush();
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+            //System.out.println("File access cancelled by user.");
+        }
     }//GEN-LAST:event_savePublicKeyActionPerformed
 
     private void searchPrivateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPrivateActionPerformed
         // TODO add your handling code here:
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        
+        // process selected file
+        String filePath = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            filePath = file.getAbsolutePath();
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+        
+        //load selected file
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Always wrap FileReader in BufferedReader.
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        privateKeyInput.setText(fileChooser.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_searchPrivateActionPerformed
 
     private void searchPublicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchPublicActionPerformed
         // TODO add your handling code here:
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        
+        // process selected file
+        String filePath = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            filePath = file.getAbsolutePath();
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+        
+        //load selected file
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Always wrap FileReader in BufferedReader.
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        publicKeyInput.setText(fileChooser.getSelectedFile().getAbsolutePath());
     }//GEN-LAST:event_searchPublicActionPerformed
 
     private void searchFileTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFileTextActionPerformed
         // TODO add your handling code here:
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        
+        // process selected file
+        String filePath = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            filePath = file.getAbsolutePath();
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+        
+        //load selected file
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Always wrap FileReader in BufferedReader.
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try {
+            fileTextInputEncrypt.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            InputTeksArea.read(bufferedReader, filePath);
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_searchFileTextActionPerformed
-
-    private void DecryptRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DecryptRadioButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_DecryptRadioButtonActionPerformed
 
     private void privateKeyFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_privateKeyFieldActionPerformed
         // TODO add your handling code here:
@@ -386,8 +603,64 @@ public class mainGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         String privateKey = privateKeyField.getText();
-        Point publicKey = generatePublicKey(privateKey);
+        Point publicKey = ECC.generatePublicKey(Long.parseLong(privateKey));
+        publicKeyField.setText(publicKey.toString());
     }//GEN-LAST:event_generateKeyActionPerformed
+
+    private void searchFileText2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFileText2ActionPerformed
+        // TODO add your handling code here:
+        
+        int returnVal = fileChooser.showOpenDialog(this);
+        
+        // process selected file
+        String filePath = null;
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            filePath = file.getAbsolutePath();
+        } else {
+            System.out.println("File access cancelled by user.");
+        }
+        
+        //load selected file
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        // Always wrap FileReader in BufferedReader.
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try {
+            fileTextInputDecrypt.setText(fileChooser.getSelectedFile().getAbsolutePath());
+            InputTeksArea.read(bufferedReader, filePath);
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_searchFileText2ActionPerformed
+
+    private void saveOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveOutputActionPerformed
+        // TODO add your handling code here:
+        
+        int returnVal = fileChooser.showSaveDialog(this);
+       
+        // process selected file
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            
+            try {
+                PrintWriter out = new PrintWriter(file);
+                out.println(OutputTeksArea.getText());
+                out.flush();
+                out.close();
+            } catch (IOException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        } else {
+            //System.out.println("File access cancelled by user.");
+        }
+    }//GEN-LAST:event_saveOutputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -425,37 +698,63 @@ public class mainGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextArea CipherteksArea;
-    private javax.swing.JRadioButton DecryptRadioButton;
+    private javax.swing.JLabel ALabel;
+    private javax.swing.JLabel BLabel;
+    private javax.swing.JRadioButton DecryptRadioButton1;
     private javax.swing.ButtonGroup EncryptDecrypt;
-    private javax.swing.JRadioButton EncryptRadioButton;
-    private javax.swing.JButton ExecuteButton;
+    private javax.swing.JRadioButton EncryptRadioButton1;
+    private javax.swing.JButton ExecuteButton1;
+    private javax.swing.JTextArea InputTeksArea;
     private java.awt.Label InputText;
+    private javax.swing.JTextArea OutputTeksArea;
     private java.awt.Label OutputText;
-    private javax.swing.JTextArea PlainteksArea;
-    private javax.swing.JTextField fileTextInput;
+    private javax.swing.JLabel PLabel;
+    private javax.swing.JLabel basePointLabel;
+    private javax.swing.JButton decrypt;
+    private javax.swing.JButton encrypt;
+    private javax.swing.JFileChooser fileChooser;
+    private javax.swing.JTextField fileTextInput1;
+    private javax.swing.JTextField fileTextInputDecrypt;
+    private javax.swing.JTextField fileTextInputEncrypt;
     private javax.swing.JButton generateKey;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField privateKeyField;
-    private javax.swing.JTextField privateKeyInput1;
+    private javax.swing.JTextField privateKeyInput;
+    private javax.swing.JTextField privateKeyInput2;
     private javax.swing.JLabel privateKeyLabel;
     private javax.swing.JLabel privateKeyLabel1;
+    private javax.swing.JLabel privateKeyLabel2;
     private javax.swing.JLabel publicKeyField;
     private javax.swing.JTextField publicKeyInput;
+    private javax.swing.JTextField publicKeyInput1;
     private javax.swing.JLabel publicKeyLabel;
     private javax.swing.JLabel publicKeyLabel1;
     private javax.swing.JLabel publicKeyLabel2;
+    private javax.swing.JLabel publicKeyLabel3;
+    private javax.swing.JLabel publicKeyLabel4;
+    private javax.swing.JLabel publicKeyLabel5;
     private javax.swing.JButton saveOutput;
     private javax.swing.JButton savePrivateKey;
     private javax.swing.JButton savePublicKey;
     private javax.swing.JButton searchFileText;
+    private javax.swing.JButton searchFileText1;
+    private javax.swing.JButton searchFileText2;
     private javax.swing.JButton searchPrivate;
+    private javax.swing.JButton searchPrivate1;
     private javax.swing.JButton searchPublic;
+    private javax.swing.JButton searchPublic1;
     // End of variables declaration//GEN-END:variables
 }
