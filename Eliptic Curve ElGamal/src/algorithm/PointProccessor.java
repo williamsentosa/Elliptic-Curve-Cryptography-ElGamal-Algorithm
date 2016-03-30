@@ -166,37 +166,37 @@ public class PointProccessor {
 //     
        Point p1 = new Point(2,4);
        Point p2 = new Point(5,9);
-//       Point base = new Point(0,1);
-//       Point pub = new Point(3,3);
-//       Point pm = new Point(110,124);
-//       long pri = 3;
+       Point base = new Point(2,53);
+       Point pub = new Point(64,286);
+       Point pm = new Point(111,8);
+       long pri = 3;
        
-       System.out.println(p1);
-       System.out.println(p2);
+//       System.out.println(p1);
+//       System.out.println(p2);
        
-//       Pair<Point, Point> Pc = pp.encrypt(pm, pub, base);
-//       System.out.println("pc " + Pc);
+       Pair<Point, Point> Pc = pp.encrypt(pm, pub, base);
+       System.out.println("pc " + Pc);
        
-//       Point pm2 = new Point();
-//       pm2 = pp.decrypt(Pc, pri, base);
-//       System.out.println("pm2 " + pm2);
+       Point pm2 = new Point();
+       pm2 = pp.decrypt(Pc, pri, base);
+       System.out.println("pm2 " + pm2);
        
-       Point multiplyPoint = new Point();
-       multiplyPoint = pp.multiply(3, p1);
-       System.out.println("multiply : " + multiplyPoint);
-       
-       Point addPoint = new Point();
-       addPoint = pp.add(pp.doublePoint(p1), p1);
-       System.out.println("Penjumlahan : " + addPoint);
-       
+//       Point multiplyPoint = new Point();
+//       multiplyPoint = pp.multiply(3, p1);
+//       System.out.println("multiply : " + multiplyPoint);
+//       
+//       Point addPoint = new Point();
+//       addPoint = pp.add(pp.doublePoint(p1), p1);
+//       System.out.println("Penjumlahan : " + addPoint);
+//       
 //       Point tempPoint = new Point();
 //       tempPoint = pp.multiply(pri, Pc.getKey());
 //       System.out.println("b . kB : " + tempPoint);
-       
+//       
 //       Point minusPoint = new Point();
 //       minusPoint = pp.minus(Pc.getValue(), tempPoint);
 //       System.out.println("Pm : " + minusPoint);
-       
+//       
 //       Point doubleP = new Point();
 //       doubleP = pp.doublePoint(p1);
 //       System.out.println("Penggandaan 2P : " + doubleP);
