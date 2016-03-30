@@ -49,12 +49,16 @@ public class PointProccessor {
         Point base = new Point(P.getX(), P.getY());
         
         String binary = Long.toBinaryString(n);
-            for (int i=binary.length()-1; i>=0; i--) {
-                if (binary.charAt(i) == '1') {
+        for (int i=binary.length()-1; i>=0; i--) {
+            if (binary.charAt(i) == '1') {
+                if (i == binary.length()-1){
+                    result = base;
+                } else {
                     result = add(result, base);
                 }
-                base = doublePoint(base);
             }
+            base = doublePoint(base);
+        }
         
         return result;
     }
@@ -72,8 +76,7 @@ public class PointProccessor {
         long lq = n, ly = 1;
         long tq = lq, ty = ly;
         while (lq != 1) {
-            long d;
-            d = gq/lq;
+            long d = gq/lq;
             lq = gq - d*lq; ly = gy - d*ly;
             gq = tq; gy = ty;
             tq = lq; ty = ly;
@@ -130,9 +133,10 @@ public class PointProccessor {
     public Pair<Point, Point> encrypt(Point pm, Point pub, Point base) {
         Pair<Point, Point> Pc = null;
         long p = EllipticCurveAlgorithm.P;
-        Random randomNumber = new Random();
-      
-        long k = randomNumber.nextLong() % (p-1);
+//        Random randomNumber = new Random();
+//      
+//        long k = randomNumber.nextLong() % (p-1);
+        long k = 5;
         
         Point px = new Point();
         Point py = new Point();
@@ -162,24 +166,37 @@ public class PointProccessor {
 //     
        Point p1 = new Point(2,4);
        Point p2 = new Point(5,9);
+//       Point base = new Point(0,1);
+//       Point pub = new Point(3,3);
+//       Point pm = new Point(110,124);
+//       long pri = 3;
+       
        System.out.println(p1);
        System.out.println(p2);
        
+//       Pair<Point, Point> Pc = pp.encrypt(pm, pub, base);
+//       System.out.println("pc " + Pc);
+       
+//       Point pm2 = new Point();
+//       pm2 = pp.decrypt(Pc, pri, base);
+//       System.out.println("pm2 " + pm2);
+       
        Point multiplyPoint = new Point();
        multiplyPoint = pp.multiply(3, p1);
-       System.out.println("Perkalian 3P1 : " + multiplyPoint);
+       System.out.println("multiply : " + multiplyPoint);
        
        Point addPoint = new Point();
-       addPoint = pp.add(p1, p2);
-       System.out.println("Penjumlahan p1 p2 : " + addPoint);
+       addPoint = pp.add(pp.doublePoint(p1), p1);
+       System.out.println("Penjumlahan : " + addPoint);
        
-       Point minusPoint = new Point();
-       minusPoint = pp.minus(p1, p2);
-       System.out.println("Pengurangan p1 p2 : " + minusPoint);
+//       Point tempPoint = new Point();
+//       tempPoint = pp.multiply(pri, Pc.getKey());
+//       System.out.println("b . kB : " + tempPoint);
        
-       minusPoint = pp.add(minusPoint, p2);
-       minusPoint = pp.add(minusPoint, p2);
-       System.out.println("Penjumlahan p1 p2 : " + addPoint);
+//       Point minusPoint = new Point();
+//       minusPoint = pp.minus(Pc.getValue(), tempPoint);
+//       System.out.println("Pm : " + minusPoint);
+       
 //       Point doubleP = new Point();
 //       doubleP = pp.doublePoint(p1);
 //       System.out.println("Penggandaan 2P : " + doubleP);
