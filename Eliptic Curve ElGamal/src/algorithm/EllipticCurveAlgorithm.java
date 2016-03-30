@@ -8,15 +8,16 @@ package algorithm;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.util.Pair;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
  * @author William Sentosa
  */
 public class EllipticCurveAlgorithm {
-   public static final long P = 307;
-   public static final long A = 11;
-   public static final long B = 14;
+   public static final long P = 239;
+   public static final long A = 8;
+   public static final long B = 10;
    public final Point base;
    private final long NULL_VALUE = -1;
    
@@ -104,22 +105,13 @@ public class EllipticCurveAlgorithm {
    }
    
    /**
-    * Generating a random public key with maximum value of P
-    * @return a random public key
-    */
-   public long generatePublicKey() {
-       Random rand = new Random();
-       return rand.nextLong() % P;
-   }
-   
-   /**
     * Generate a private key based on a public key
     * @param pub public key
     * @return private key
     */
-   public Point generatePrivateKey(long pub) {
+   public Point generatePublicKey(long pri) {
        PointProccessor processor = new PointProccessor();
-       Point result = processor.multiply(pub, base);
+       Point result = processor.multiply(pri, base);
        return result;
    }
    
@@ -134,12 +126,9 @@ public class EllipticCurveAlgorithm {
        byte[] result = new byte[bytes.length*2];
        Point[] p = new Point[bytes.length];
        int j = 0;
-       System.out.println("*** Enkripsi ***");
        for(int i=0; i<bytes.length; i++) {
            p[i] = map(bytes[i]);
-           System.out.println(p[i]);
            Pair<Point, Point> pair = processor.encrypt(p[i], pub, base);
-           System.out.println(pair); 
            result[j] = map(pair.getKey());
            j++;
            result[j] = map(pair.getValue());
@@ -158,13 +147,10 @@ public class EllipticCurveAlgorithm {
        PointProccessor processor = new PointProccessor();
        byte[] result = new byte[bytes.length/2];
        int j = 0;
-       System.out.println("*** Dekripsi ***");
        for(int i=0; i<result.length; i++) {
            Pair<Point, Point> pair = new Pair(map(bytes[j]),map(bytes[j+1]));
-           System.out.println(pair);
            j+=2;
            Point temp = processor.decrypt(pair, pri, base);
-           System.out.println(temp);
            result[i] = map(temp);
        }
        return result;
@@ -172,28 +158,23 @@ public class EllipticCurveAlgorithm {
    
    public static void main(String args[]) {
        EllipticCurveAlgorithm algorithm = new EllipticCurveAlgorithm();
-       for(int i=0; i<algorithm.field.size(); i++) {
-           System.out.println(algorithm.field.get(i));
+       PointProccessor processor = new PointProccessor();
+       System.out.println("Base " + algorithm.base);
+       String text = "Halo nama saya adalah william sentosa";
+       byte[] bytes = text.getBytes();
+       System.out.println("Text awal : " + text);
+       long pri = 5;
+       Point pub = processor.multiply(pri, algorithm.base);
+       byte[] result = algorithm.encrypt(bytes, pub);
+       String encryptedText = DatatypeConverter.printHexBinary(result);
+       System.out.println(encryptedText);
+       result = algorithm.decrypt(DatatypeConverter.parseHexBinary(encryptedText), pri);
+       for(int i=0; i<result.length; i++) {
+           System.out.print(result[i] + " ");
        }
-//       PointProccessor processor = new PointProccessor();
-//       String text = "Halo nama saya adalah william sentosa";
-//       byte[] bytes = text.getBytes();
-//       System.out.println("Base Point : " + algorithm.base);
-//       for(int i=0; i<bytes.length; i++) {
-//           System.out.print(bytes[i] + " ");
-//       }
-//       System.out.println();
-//       long pri = 5;
-//       Point pub = processor.multiply(pri, algorithm.base);
-//       byte[] result = algorithm.encrypt(bytes, pub);
-////       String str = new String(result);
-////       System.out.println(str);
-//       result = algorithm.decrypt(result, pri);
-//       for(int i=0; i<result.length; i++) {
-//           System.out.print(result[i] + " ");
-//       }
-////       str = new String(result);
-////       System.out.println(str);
+       System.out.println("");
+       String str = new String(result);
+       System.out.println(str);
    }
    
 }
