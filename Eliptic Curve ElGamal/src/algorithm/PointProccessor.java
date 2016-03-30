@@ -9,7 +9,7 @@ import java.util.Random;
 import javafx.util.Pair;
 
 /**
- * @author 
+ * @author Vincent TC
  * @author William Sentosa
  */
 public class PointProccessor {
@@ -133,9 +133,7 @@ public class PointProccessor {
     public Pair<Point, Point> encrypt(Point pm, Point pub, Point base) {
         Pair<Point, Point> Pc = null;
         long p = EllipticCurveAlgorithm.P;
-//        Random randomNumber = new Random();
-//      
-//        long k = randomNumber.nextLong() % (p-1);
+
         long k = 5;
         
         Point px = new Point();
@@ -163,7 +161,7 @@ public class PointProccessor {
     public static void main(String args[]) {
        EllipticCurveAlgorithm algorithm = new EllipticCurveAlgorithm();
        PointProccessor pp = new PointProccessor();
-//     
+     
        Point p1 = new Point(2,4);
        Point p2 = new Point(5,9);
        Point base = new Point(2,53);
@@ -171,8 +169,6 @@ public class PointProccessor {
        Point pm = new Point(111,8);
        long pri = 3;
        
-//       System.out.println(p1);
-//       System.out.println(p2);
        
        Pair<Point, Point> Pc = pp.encrypt(pm, pub, base);
        System.out.println("pc " + Pc);
@@ -180,30 +176,6 @@ public class PointProccessor {
        Point pm2 = new Point();
        pm2 = pp.decrypt(Pc, pri, base);
        System.out.println("pm2 " + pm2);
-       
-//       Point multiplyPoint = new Point();
-//       multiplyPoint = pp.multiply(3, p1);
-//       System.out.println("multiply : " + multiplyPoint);
-//       
-//       Point addPoint = new Point();
-//       addPoint = pp.add(pp.doublePoint(p1), p1);
-//       System.out.println("Penjumlahan : " + addPoint);
-//       
-//       Point tempPoint = new Point();
-//       tempPoint = pp.multiply(pri, Pc.getKey());
-//       System.out.println("b . kB : " + tempPoint);
-//       
-//       Point minusPoint = new Point();
-//       minusPoint = pp.minus(Pc.getValue(), tempPoint);
-//       System.out.println("Pm : " + minusPoint);
-//       
-//       Point doubleP = new Point();
-//       doubleP = pp.doublePoint(p1);
-//       System.out.println("Penggandaan 2P : " + doubleP);
-//       
-//       Point addPoint = new Point();
-//       addPoint = pp.add(p1, doubleP);
-//       System.out.println("Penjumlahan 2P+P : " + addPoint);
        
    }
 }

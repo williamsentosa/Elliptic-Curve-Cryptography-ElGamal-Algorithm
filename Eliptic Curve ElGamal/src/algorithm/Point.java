@@ -1,16 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package algorithm;
 
 /**
- *
+ * @Vincent TC
  * @author William Sentosa
  */
 public class Point {
-    private long x;
+	private long x;
     private long y;
     
     public Point() {
@@ -41,7 +36,7 @@ public class Point {
     
     @Override
     public String toString() {
-        String result = "(" + x + "," + y + ")";
+        String result = x + " " + y;
         return result;
     }
     

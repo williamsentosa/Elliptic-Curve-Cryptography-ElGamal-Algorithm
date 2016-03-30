@@ -267,6 +267,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Encrypt"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="encryptActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -488,6 +491,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Decrypt"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="decryptActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

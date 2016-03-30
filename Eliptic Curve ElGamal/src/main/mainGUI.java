@@ -15,6 +15,7 @@ import algorithm.Point;
 import algorithm.PointProccessor;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -23,6 +24,7 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.xml.bind.DatatypeConverter;
 
 /**
  *
@@ -33,6 +35,7 @@ public class mainGUI extends javax.swing.JFrame {
     private EllipticCurveAlgorithm ECC;
     private Point P;
     private PointProccessor PP;
+    private byte[] resultByte;
     /**
      * Creates new form mainGUI
      */
@@ -193,6 +196,11 @@ public class mainGUI extends javax.swing.JFrame {
         });
 
         encrypt.setText("Encrypt");
+        encrypt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                encryptActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -318,6 +326,11 @@ public class mainGUI extends javax.swing.JFrame {
         });
 
         decrypt.setText("Decrypt");
+        decrypt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                decryptActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -662,6 +675,69 @@ public class mainGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveOutputActionPerformed
 
+    private void encryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptActionPerformed
+        String filePath = publicKeyInput.getText();
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Point pub = new Point();
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try {
+            String key = bufferedReader.readLine();
+            String[] str = key.split(" ");
+            pub.setX(Long.parseLong(str[0]));
+            pub.setY(Long.parseLong(str[1]));
+            System.out.println("Public key : " + pub);
+            bufferedReader.close();
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        File file = new File(this.fileTextInputEncrypt.getText());
+        byte[] bytes = new byte[ (int) file.length()];
+        try {
+            FileInputStream fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bytes);
+            for (int i = 0; i < bytes.length; i++) {
+                System.out.print(bytes[i] + " ");
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        resultByte = ECC.encrypt(bytes, pub);
+        this.OutputTeksArea.setText(DatatypeConverter.printHexBinary(resultByte));
+    }//GEN-LAST:event_encryptActionPerformed
+
+    private void decryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptActionPerformed
+        String filePath = privateKeyInput.getText();
+        FileReader fileReader = null;
+        try {
+            fileReader = new FileReader(filePath);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        long pri = 0;
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+        String text = "";
+        try {
+            String key = bufferedReader.readLine();
+            pri = Long.parseLong(key);
+            bufferedReader.close();
+            fileReader = new FileReader(this.fileTextInputDecrypt.getText());
+            bufferedReader = new BufferedReader(fileReader);
+            text = bufferedReader.readLine();
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        byte[] bytes = DatatypeConverter.parseHexBinary(text);
+        resultByte = ECC.decrypt(bytes, pri);
+        this.OutputTeksArea.setText(new String(resultByte));
+    }//GEN-LAST:event_decryptActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -700,10 +776,7 @@ public class mainGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel ALabel;
     private javax.swing.JLabel BLabel;
-    private javax.swing.JRadioButton DecryptRadioButton1;
     private javax.swing.ButtonGroup EncryptDecrypt;
-    private javax.swing.JRadioButton EncryptRadioButton1;
-    private javax.swing.JButton ExecuteButton1;
     private javax.swing.JTextArea InputTeksArea;
     private java.awt.Label InputText;
     private javax.swing.JTextArea OutputTeksArea;
@@ -713,7 +786,6 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JButton decrypt;
     private javax.swing.JButton encrypt;
     private javax.swing.JFileChooser fileChooser;
-    private javax.swing.JTextField fileTextInput1;
     private javax.swing.JTextField fileTextInputDecrypt;
     private javax.swing.JTextField fileTextInputEncrypt;
     private javax.swing.JButton generateKey;
@@ -726,35 +798,25 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField privateKeyField;
     private javax.swing.JTextField privateKeyInput;
-    private javax.swing.JTextField privateKeyInput2;
     private javax.swing.JLabel privateKeyLabel;
     private javax.swing.JLabel privateKeyLabel1;
-    private javax.swing.JLabel privateKeyLabel2;
     private javax.swing.JLabel publicKeyField;
     private javax.swing.JTextField publicKeyInput;
-    private javax.swing.JTextField publicKeyInput1;
     private javax.swing.JLabel publicKeyLabel;
     private javax.swing.JLabel publicKeyLabel1;
     private javax.swing.JLabel publicKeyLabel2;
-    private javax.swing.JLabel publicKeyLabel3;
-    private javax.swing.JLabel publicKeyLabel4;
     private javax.swing.JLabel publicKeyLabel5;
     private javax.swing.JButton saveOutput;
     private javax.swing.JButton savePrivateKey;
     private javax.swing.JButton savePublicKey;
     private javax.swing.JButton searchFileText;
-    private javax.swing.JButton searchFileText1;
     private javax.swing.JButton searchFileText2;
     private javax.swing.JButton searchPrivate;
-    private javax.swing.JButton searchPrivate1;
     private javax.swing.JButton searchPublic;
-    private javax.swing.JButton searchPublic1;
     // End of variables declaration//GEN-END:variables
 }
