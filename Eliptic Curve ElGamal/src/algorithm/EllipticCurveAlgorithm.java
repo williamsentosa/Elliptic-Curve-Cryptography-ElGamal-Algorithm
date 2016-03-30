@@ -14,7 +14,7 @@ import javafx.util.Pair;
  * @author William Sentosa
  */
 public class EllipticCurveAlgorithm {
-   public static final long P = 11;
+   public static final long P = 307;
    public static final long A = 12;
    public static final long B = 14;
    public final Point base;
@@ -155,10 +155,9 @@ public class EllipticCurveAlgorithm {
    public byte[] decrypt(byte[] bytes, long pri) {
        PointProccessor processor = new PointProccessor();
        byte[] result = new byte[bytes.length/2];
-       Point[] p = new Point[bytes.length];
        int j = 0;
        for(int i=0; i<result.length; i++) {
-           Pair<Point, Point> pair = new Pair(p[j],p[j+1]);
+           Pair<Point, Point> pair = new Pair(map(bytes[j]),map(bytes[j+1]));
            j+=2;
            Point temp = processor.decrypt(pair, pri, base);
            result[i] = map(temp);
@@ -178,11 +177,14 @@ public class EllipticCurveAlgorithm {
        long pri = 5;
        Point pub = processor.multiply(pri, algorithm.base);
        byte[] result = algorithm.encrypt(bytes, pub);
-       String str = new String(result);
-       System.out.println(str);
+//       String str = new String(result);
+//       System.out.println(str);
        result = algorithm.decrypt(result, pri);
-       str = new String(result);
-       System.out.println(str);
+       for(int i=0; i<result.length; i++) {
+           System.out.print(result[i] + " ");
+       }
+//       str = new String(result);
+//       System.out.println(str);
    }
    
 }
