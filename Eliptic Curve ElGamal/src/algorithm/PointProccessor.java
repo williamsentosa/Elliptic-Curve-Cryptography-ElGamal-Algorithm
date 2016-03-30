@@ -100,6 +100,9 @@ public class PointProccessor {
         } else if (p1.getY() == -p2.getY()){
             result.setX(0);
             result.setY(0);
+        } else if (p1.getX() - p2.getX() == 0){
+            result.setX(Long.MAX_VALUE);
+            result.setY(Long.MAX_VALUE);
         } else {
             long lambda, xr, yr, inv;
             
