@@ -13,7 +13,7 @@ import java.util.Random;
  * @author William Sentosa
  */
 public class EllipticCurveAlgorithm {
-   public static final long P = 283;
+   public static final long P = 11;
    public static final long A = 12;
    public static final long B = 14;
    private final Point base;
