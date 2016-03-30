@@ -36,6 +36,8 @@ public class mainGUI extends javax.swing.JFrame {
     private Point P;
     private PointProccessor PP;
     private byte[] resultByte;
+    private boolean isEncrypt = false;
+    private boolean isDecrypt = false;
     /**
      * Creates new form mainGUI
      */
@@ -660,22 +662,31 @@ public class mainGUI extends javax.swing.JFrame {
         // process selected file
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fileChooser.getSelectedFile();
-            
             try {
-                PrintWriter out = new PrintWriter(file);
-                out.println(OutputTeksArea.getText());
-                out.flush();
-                out.close();
+                if(this.isEncrypt) {
+                    PrintWriter out = new PrintWriter(file);
+                    out.println(OutputTeksArea.getText());
+                    out.flush();
+                    out.close();
+                    this.isEncrypt = false;
+                } else if(this.isDecrypt) {
+                    FileOutputStream fos = new FileOutputStream(file.getPath());
+                    fos.write(this.resultByte);
+                    fos.close(); 
+                    this.isDecrypt = false;
+                }
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+            }        
         } else {
             //System.out.println("File access cancelled by user.");
         }
     }//GEN-LAST:event_saveOutputActionPerformed
 
     private void encryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_encryptActionPerformed
+        isEncrypt = true;
         String filePath = publicKeyInput.getText();
         FileReader fileReader = null;
         try {
@@ -713,6 +724,7 @@ public class mainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_encryptActionPerformed
 
     private void decryptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_decryptActionPerformed
+        this.isDecrypt = true;
         String filePath = privateKeyInput.getText();
         FileReader fileReader = null;
         try {
@@ -735,6 +747,9 @@ public class mainGUI extends javax.swing.JFrame {
         }
         byte[] bytes = DatatypeConverter.parseHexBinary(text);
         resultByte = ECC.decrypt(bytes, pri);
+        for(int i=0; i<resultByte.length; i++) {
+            System.out.print(resultByte[i] + " ");
+        }
         this.OutputTeksArea.setText(new String(resultByte));
     }//GEN-LAST:event_decryptActionPerformed
 
